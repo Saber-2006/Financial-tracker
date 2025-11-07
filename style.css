@@ -1,0 +1,172 @@
+
+.layout{
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    grid-template-rows: auto auto auto auto auto;
+    grid-template-areas:
+        "nav nav"
+        "cont cont"
+        "progressCircle topExpenses"
+        "ExpensesList Overview"
+        
+        "Expense Balance";
+    gap: 20px;
+    width: 100%; 
+    padding: 10px;
+}
+
+/* Areas */
+nav{
+    grid-area: nav;
+    position: sticky;
+    top: 0;  
+    background-color: #F7FAFE; 
+    width: 95%;
+    border-radius: 15px; 
+    margin: auto;
+    z-index: 10;
+}
+
+.balancecon{
+    grid-area: cont;
+    width: 95%;
+    margin: auto;
+}
+
+#ExpensesList{
+    grid-area: ExpensesList;
+    width: 90%;
+    margin: auto;
+    max-height: 400px;
+    overflow-y: auto;
+}
+
+#Overview{
+    grid-area: Overview;
+    width: 90%;
+    margin: auto;
+}
+
+.Circle{
+    grid-area: progressCircle;
+    width: 90%;
+    margin: auto;
+    background-color: #FDFDFE;
+    border-radius: 15px; 
+    box-shadow: 0 0 5px rgba(0,0,0,.1);  
+    padding: 20px;
+}
+.Circle h2{
+    margin: 10px; 
+
+}
+
+.Expense{
+    grid-area: Expense;
+    
+}
+
+.Balance{
+    grid-area: Balance;
+}
+
+/* Balance Cards */
+.innercontainer{
+    display: grid;
+    column-gap: 5%;
+    grid-template-columns: repeat(3, 1fr);
+}
+
+.balanceInfo{  
+    background-color: #FDFDFE;
+    border-radius: 15px; 
+    box-shadow: 0 0 5px rgba(0,0,0,.1); 
+    padding: 20px 10px;     
+} 
+
+.balncep{
+    color: #6a7282; 
+    font-size: 14px;
+    font-weight: 600;
+} 
+
+.balanceInfo h2{
+    font-size: 32px; 
+    font-weight: 700;
+}
+
+/* Overview bars */
+#categoryOverview .progress{
+    height: 10px;
+    border-radius: 10px;
+    background: #e5e7eb;
+}
+#categoryOverview .progress-bar{
+    background: #6b93ff;
+}
+
+/* Progress Circle */
+.progress-circle {
+    width: 140px;
+    height: 140px;
+    border-radius: 50%;
+    background: conic-gradient(#4CAF50 0deg, #ddd 0deg); 
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: 22px;
+    font-weight: 600;
+    color: #333;
+    position: relative;
+}
+.progress-circle span {
+    position: absolute;
+}
+
+/* Forms */
+.form-aside{ 
+    width: 90%;
+    margin: auto; 
+    background-color:#FDFDFE;
+    border-radius: 15px; 
+    box-shadow: 0 0 6px rgba(0,0,0,.1); 
+    padding: 20px;  
+}
+
+/* Scroll List */
+.ExpensesListcontainer{
+    overflow-y: auto;
+}
+.declar{
+    display: flex; 
+    flex-direction: column;
+    margin-right: 20px; 
+}
+.info{ 
+    
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between; 
+    margin-bottom: 20px;
+}
+.info div{
+    width: 20px;
+    height: 20px;
+    border-radius: 5px;
+    background-color: #DDDDDD; 
+    margin: 5px;
+}
+.CircleInner{ 
+    margin-top: 20px;
+    display: grid;
+    grid-template-columns: 1fr 1fr; 
+} 
+#progressCircle{
+    margin:10px auto; 
+}
+.m,.mm{ 
+    padding: 20px ;
+    background-color: #FDFDFE;
+    border-radius: 15px; 
+    box-shadow: 0 0 5px rgba(0,0,0,.1);  
+}

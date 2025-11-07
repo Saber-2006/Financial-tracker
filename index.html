@@ -1,0 +1,298 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Financial Tracker for Aya</title>
+    <link
+      href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css"
+      rel="stylesheet"
+      integrity="sha384-sRIl4kxILFvY47J16cr9ZwB07vP4J8+LH7qKQnuqkuIAvNWLzeN8tE5YBujZqJLB"
+      crossorigin="anonymous"
+    />
+    <link rel="stylesheet" href="style.css" />
+  </head>
+  <body>
+    <div class="layout">
+      <nav class="d-flex justify-content-between m-t-2 p-4">
+        <h2>Financial tracker for Aya</h2>
+
+        <ul class="nav nav-pills">
+          <li class="nav-item"><a class="nav-link active" href="#">home</a></li>
+          <li class="nav-item"><a class="nav-link" href="#ExpensesList">Expenses List</a></li>
+          <li class="nav-item"><a class="nav-link" href="#Overview" target="_self">Overview</a></li>
+          <li class="nav-item"><a class="nav-link" href="#">Income Vs Expenses</a></li>
+        </ul>
+        <div>
+          <button class="btn btn-primary" id="addExpenseBtn">Add Expense</button>
+          <button class="btn btn-success" id="addBalanceBtn">Add Balance</button>
+        </div>
+      </nav>
+
+      <div class="container balancecon">
+        <div class="innercontainer">
+          <div class="balanceInfo">
+            <p class="balncep">Current Balance</p>
+            <h2 id="balanceDisplay">0 AED</h2>
+          </div>
+          <div class="balanceInfo">
+            <p class="balncep">Last Income</p>
+            <h2 id="incomeDisplay">0 AED</h2>
+          </div>
+          <div class="balanceInfo">
+            <p class="balncep">Expenses</p>
+            <h2 id="expenseDisplay">0 AED</h2>
+          </div>
+        </div>
+      </div>
+
+      <div class="m">
+        <h3 class="m-3">Expenses List</h3>
+        <div class="ExpensesListcontainer" id="ExpensesList">
+          <div id="expensesList"></div>
+        </div>
+      </div>
+
+      <div class="Overviewcontainer mm" id="Overview">
+        <h3>Category Overview</h3>
+        <div id="categoryOverview"></div>
+      </div> 
+
+      <div class="progress-container Circle">  
+        <h2>Income Vs Expenses</h2> 
+        <div class="CircleInner">
+          <div class="declar">
+            <div class="info">
+              <div class="color bg-success"></div>
+              <span> Expenses less than 50% from balance</span> 
+            </div>
+            <div class="info">
+              <div class="color bg-warning"></div>
+              <span>Expenses less than 80% from balance</span> 
+            </div>
+            <div class="info">
+              <div class="color bg-danger"></div>
+              <span>Expenses more than 80% from balance</span> 
+            </div> 
+          </div>
+          <div class="progress-circle" id="progressCircle">
+            <span id="progressValue">0%</span>
+          </div> 
+        </div>  
+      </div>
+
+      <div class="top-expenses-box" style="grid-area: topExpenses; background-color:#FDFDFE; border-radius:15px; box-shadow:0 0 5px rgba(0,0,0,.1); padding:20px;">
+        <h5>Top Expenses</h5>
+        <ul id="topExpensesList" class="list-group list-group-flush">
+          <!-- أعلى 3 مصاريف -->
+        </ul>
+      </div>
+
+      <!-- Aside for Add Expense -->
+      <div id="expenseAside" class="form-aside Expense">
+        <div class="form-container">
+          <h5>Add Expense</h5>
+          <form id="expenseForm">
+            <div class="mb-3">
+              <label class="form-label">Title</label>
+              <input type="text" class="form-control" name="title" placeholder="e.g. Groceries, Netflix, Taxi" required />
+            </div>
+            <div class="mb-3">
+              <label class="form-label">Amount</label>
+              <input type="number" class="form-control" name="amount" placeholder="e.g. 150" required />
+            </div>
+            <div class="mb-3">
+              <label class="form-label">Category</label>
+              <select class="form-select" name="category" required>
+                <option value="Groceries">Groceries</option>
+                <option value="Bills">Bills</option>
+                <option value="Transportation">Transportation</option>
+                <option value="Shopping">Shopping</option>
+                <option value="Rent">Rent</option>
+                <option value="Entertainment">Entertainment</option>
+                <option value="Other">Other</option>
+              </select>
+            </div>
+            <div class="mb-3">
+              <label class="form-label">Notes (optional)</label>
+              <textarea class="form-control" name="notes" rows="2" placeholder="Any notes..."></textarea>
+            </div>
+            <button type="button" class="btn btn-primary" id="saveExpense">Save</button>
+          </form>
+        </div>
+      </div>
+
+      <!-- Aside for Add Balance -->
+      <div id="balanceAside" class="form-aside Balance">
+        <div class="form-container">
+          <h5>Add Balance</h5>
+          <form id="balanceForm">
+            <div class="mb-3">
+              <label class="form-label">Amount to Add</label>
+              <input type="number" class="form-control" name="amount" placeholder="e.g. 1000" required />
+            </div>
+            <div class="mb-3">
+              <label class="form-label">Notes (optional)</label>
+              <textarea class="form-control" name="notes" rows="2" placeholder="Any notes..."></textarea>
+            </div>
+            <button type="button" class="btn btn-success" id="saveBalance">Save</button>
+          </form>
+        </div>
+      </div>
+
+      <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js" crossorigin="anonymous"></script>
+      <script> 
+        document.addEventListener("DOMContentLoaded", function () {
+          const balanceDisplay = document.getElementById('balanceDisplay');
+          const expenseDisplay = document.getElementById('expenseDisplay');
+          const incomeDisplay = document.getElementById('incomeDisplay');
+
+          let currentBalance = parseFloat(localStorage.getItem("currentBalance")) || 2000;
+          let totalExpenses = parseFloat(localStorage.getItem("totalExpenses")) || 0;
+          let lastIncome = parseFloat(localStorage.getItem("lastIncome")) || 2000;
+
+          let categorySums = JSON.parse(localStorage.getItem("categorySums")) || {
+            Groceries: 0, Bills: 0, Transportation: 0, Shopping: 0,
+            Rent: 0, Entertainment: 0, Other: 0
+          };
+
+          let expensesArray = JSON.parse(localStorage.getItem("expensesArray")) || [];
+
+          function saveToLocalStorage() {
+            localStorage.setItem("currentBalance", currentBalance);
+            localStorage.setItem("totalExpenses", totalExpenses);
+            localStorage.setItem("lastIncome", lastIncome);
+            localStorage.setItem("categorySums", JSON.stringify(categorySums));
+            localStorage.setItem("expensesArray", JSON.stringify(expensesArray));
+          }
+
+          function updateDisplays() {
+            balanceDisplay.textContent = currentBalance + ' AED';
+            expenseDisplay.textContent = totalExpenses + ' AED';
+            incomeDisplay.textContent = lastIncome + ' AED';
+          }
+
+          function renderExpenses() {
+            const container = document.getElementById("expensesList");
+            container.innerHTML = "";
+            expensesArray.forEach((exp, index) => {
+              container.innerHTML += `
+                <div class="card p-3 mb-2 shadow-sm">
+                  <strong>${exp.title}</strong> - ${exp.amount} AED<br>
+                  <span class="text-secondary">${exp.category}</span><br>
+                  <small>${exp.date}</small><br>
+                  <button class="btn btn-danger btn-sm mt-2" onclick="deleteExpense(${index})">Delete</button>
+                </div>`;
+            });
+          }
+
+          function renderCategoryOverview() {
+            const container = document.getElementById("categoryOverview");
+            container.innerHTML = "";
+            for (let cat in categorySums) {
+              container.innerHTML += `
+                <div class="mb-2">
+                  <strong>${cat}</strong>: ${categorySums[cat]} AED
+                  <div class="progress">
+                    <div class="progress-bar" style="width:${(categorySums[cat]/(totalExpenses||1))*100}%"></div>
+                  </div>
+                </div>`;
+            }
+          }
+
+          function renderTopExpenses() {
+            const container = document.getElementById("topExpensesList");
+            container.innerHTML = "";
+            const sorted = [...expensesArray].sort((a,b)=>b.amount - a.amount).slice(0,3);
+            if(sorted.length===0){
+              container.innerHTML = `<li class="list-group-item text-center text-muted">No expenses yet</li>`;
+            } else {
+              sorted.forEach(exp => {
+                container.innerHTML += `
+                  <li class="list-group-item d-flex justify-content-between">
+                    <span>${exp.title}</span>
+                    <strong>${exp.amount} AED</strong>
+                  </li>`;
+              });
+            }
+          }
+
+          document.getElementById('addExpenseBtn').addEventListener('click', ()=>{document.querySelector('.Expense').scrollIntoView({ behavior: "smooth" });});
+          document.getElementById('addBalanceBtn').addEventListener('click', ()=>{document.querySelector('.Balance').scrollIntoView({ behavior: "smooth" });});
+
+          document.getElementById('saveExpense').addEventListener('click', function(){
+            const form = document.getElementById('expenseForm');
+            const title = form.title.value;
+            const amount = parseFloat(form.amount.value);
+            const category = form.category.value;
+            if(isNaN(amount)||amount<=0) return alert('Enter valid amount');
+            const expense = {title, amount, category, date: new Date().toLocaleDateString()};
+            expensesArray.push(expense);
+            categorySums[category] += amount;
+            totalExpenses += amount;
+            currentBalance -= amount;
+            saveToLocalStorage();
+            updateDisplays();
+            renderExpenses();
+            renderCategoryOverview();
+            renderTopExpenses();
+            updateProgressCircle();
+            form.reset();
+          });
+
+          document.getElementById('saveBalance').addEventListener('click', function(){
+            const form = document.getElementById('balanceForm');
+            const amount = parseFloat(form.amount.value);
+            if(isNaN(amount)||amount<=0) return alert('Enter valid amount');
+            currentBalance += amount;
+            lastIncome = amount;
+            saveToLocalStorage();
+            updateDisplays();
+            updateProgressCircle();
+            form.reset();
+          });
+
+          window.deleteExpense = function(index){
+            const exp = expensesArray[index];
+            currentBalance += exp.amount;
+            totalExpenses -= exp.amount;
+            categorySums[exp.category] -= exp.amount;
+            expensesArray.splice(index,1);
+            saveToLocalStorage();
+            updateDisplays();
+            renderExpenses();
+            renderCategoryOverview();
+            renderTopExpenses();
+            updateProgressCircle();
+          }
+
+          // Initial Load
+          updateDisplays();
+          renderExpenses();
+          renderCategoryOverview();
+          renderTopExpenses();
+          updateProgressCircle();
+        });
+
+        function updateProgressCircle(){
+          let totalExpenses = parseFloat(localStorage.getItem("totalExpenses"))||0;
+          let currentBalance = parseFloat(localStorage.getItem("currentBalance"))||0;
+          let totalIncome = currentBalance + totalExpenses;
+          let circle = document.getElementById("progressCircle");
+          let valueText = document.getElementById("progressValue");
+          if(!circle||!valueText) return;
+          if(totalIncome===0){
+            valueText.textContent="0%";
+            circle.style.background=`conic-gradient(#ddd 0deg, #ddd 360deg)`;
+            return;
+          }
+          let percent=(totalExpenses/totalIncome)*100;
+          percent=Math.min(percent,100);
+          let angle=(percent/100)*360;
+          let color=percent<50?"#4CAF50":percent<80?"#FFA500":"#FF3B3B";
+          circle.style.background=`conic-gradient(${color} ${angle}deg, #ddd ${angle}deg)`;
+          valueText.textContent=`${percent.toFixed(1)}%`;
+        }
+      </script>
+  </body>
+</html>
