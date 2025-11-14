@@ -147,9 +147,9 @@
           const expenseDisplay = document.getElementById('expenseDisplay');
           const incomeDisplay = document.getElementById('incomeDisplay');
 
-          let currentBalance = parseFloat(localStorage.getItem("currentBalance")) || 2000;
+          let currentBalance = parseFloat(localStorage.getItem("currentBalance")) || 0;
           let totalExpenses = parseFloat(localStorage.getItem("totalExpenses")) || 0;
-          let lastIncome = parseFloat(localStorage.getItem("lastIncome")) || 2000;
+          let lastIncome = parseFloat(localStorage.getItem("lastIncome")) || 0;
 
           let categorySums = JSON.parse(localStorage.getItem("categorySums")) || {
             Groceries: 0, Bills: 0, Transportation: 0, Shopping: 0,
